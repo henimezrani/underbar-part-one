@@ -127,7 +127,7 @@
 		    	}
 		    }
 		} 
- }else {
+	}else {
     	if (typeof arguments[2] ==="number"){
 	    	for (var i=arguments[2]; i<array.length; i++){
 	    		if (array[i]===target){
@@ -149,14 +149,26 @@
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
     /* START SOLUTION */
-
+    var arr=[];
+    for (var i=0 ; i<collection.length ; i++){
+  		if (test(collection[i])==true) {
+  			arr.push(collection[i]);
+  		}
+  	}
+  	return arr;
     /* END SOLUTION */
   };
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, test) {
     /* START SOLUTION */
-
+    var arr=[];
+    for (var i=0 ; i<collection.length ; i++){
+  		if (test(collection[i])==false) {
+  			arr.push(collection[i]);
+  		}
+  	}
+  	return arr;
     /* END SOLUTION */
   };
 
@@ -164,16 +176,39 @@
   _.uniq = function(array, isSorted, iterator) {
     /* START SOLUTION */
 
+   	if (array.length===0){
+   		return [];
+   	}
+
+   	var arr=[];
+   	for (var i = 0 ; i<array.length ; i++){
+   		var check=false
+   		for (var j=i+1 ; j<array.length ; j++){
+   			if (array[j]==array[i]){
+   				check=true;
+   				break;
+   			}
+   		}
+   		if (check==false){
+   			arr.push(array[i]);
+   		}
+   	}
+   	return arr;
     /* END SOLUTION */
   };
+
 
 
   // Return the results of applying an iterator to each element.
-  _.map = function(collection, iterator) {
+	_.map = function(collection, iterator) {
     /* START SOLUTION */
-
+    	var arr=[];
+    	for (var i=0;i<collection.length;i++){
+    		arr[i]=iterator(collection[i]);
+    	}
+    	return arr;
     /* END SOLUTION */
-  };
+	};
 
   /*
    * TIP: map is really handy when you want to transform an array of
@@ -206,6 +241,8 @@
   _.reduce = function(collection, iterator, accumulator) {
     /* START SOLUTION */
 
+
+
     /* END SOLUTION */
   };
 
@@ -217,12 +254,24 @@
   	return arr;
   };
 
-  _.findIndex = function(array, func){
+  _.findIndex = function(array, test){
+  	if (arguments[1]==undefined){
+  		return array;
+  	}
+
   	for (var i=0 ; i<array.length ; i++){
-  		if (func){
+  		if (test(array[i])==true) {
   			return i;
   		}
   	}
+  	return -1;
   };
+
+
+
+
+
+
+
 
 }());
