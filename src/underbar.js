@@ -94,7 +94,55 @@
   // is not present in the array.
   _.indexOf = function(array, target){
     /* START SOLUTION */
-
+    if (array.isSorted){ 
+		var middle= array.length/2;
+    	if (typeof arguments[2] == "boolean"){ 
+    		var MiddleIfArg = (array.length-arguments[2]/2)+arguments[2];
+	    	if (target>array[MiddleIfArg]){
+		    	for (var i=MiddleIfArg; i<array.length; i++){
+		    		if (array[i]===target){
+		    			return i;
+		    		}
+		    	}
+		    }else{
+		    	for (var i=arguments[2]; i<MiddleIfArg; i++){
+		    		if (array[i]===target){
+		    			return i;
+		    		}
+		    	}
+		    } 
+		    return -1;
+	    }else{
+	    	if (target>array[middle]){
+		    	for (var i=middle; i<array.length; i++){
+		    		if (array[i]===target){
+		    			return i;
+		    		}
+		    	}
+		    }else{
+		    	for (var i=0; i<middle; i++){
+		    		if (array[i]===target){
+		    			return i;
+		    		}
+		    	}
+		    }
+		} 
+ }else {
+    	if (typeof arguments[2] ==="number"){
+	    	for (var i=arguments[2]; i<array.length; i++){
+	    		if (array[i]===target){
+	    			return i;
+	    		}
+	    	}
+	    }else{
+		    for (var i=0; i<array.length; i++){
+		    	if (array[i]===target){
+		    		return i;
+		    	}
+		    }
+		}
+	}
+    return -1;
     /* END SOLUTION */
   };
 
@@ -159,6 +207,22 @@
     /* START SOLUTION */
 
     /* END SOLUTION */
+  };
+
+  _.range = function(length){
+  	var arr=[];
+  	for (var i=0; i<length ; i++){
+  		arr.push(Math.floor(Math.random() * Math.floor(200000)));
+  	}
+  	return arr;
+  };
+
+  _.findIndex = function(array, func){
+  	for (var i=0 ; i<array.length ; i++){
+  		if (func){
+  			return i;
+  		}
+  	}
   };
 
 }());
