@@ -81,10 +81,19 @@
   // Note: _.each does not have a return value, but rather simply runs the
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator) {
-    /* START SOLUTION */
-
-    
-
+	/* START SOLUTION */
+	
+	if (Array.isArray(collection)){
+		for (var i = 0; i < collection.length; i++){
+			iterator(collection[i], i, collection);
+		}
+		
+	}else if (typeof collection == "object"){
+		for (var key in collection){
+			iterator(collection[key], key, collection);
+		}
+	}
+	
 
 
     /* END SOLUTION */
@@ -174,39 +183,58 @@
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
-    /* START SOLUTION */
+
 
    	if (array.length===0){
    		return [];
    	}
-
-   	var arr=[];
-   	for (var i = 0 ; i<array.length ; i++){
-   		var check=false
-   		for (var j=i+1 ; j<array.length ; j++){
-   			if (array[j]==array[i]){
-   				check=true;
-   				break;
-   			}
-   		}
-   		if (check==false){
-   			arr.push(array[i]);
-   		}
-   	}
-   	return arr;
-    /* END SOLUTION */
+	var arr=[];
+    if (!arguments[2]){
+		for (var i = array.length-1 ; i>=0 ; i--){
+			var check=false
+			for (var j=i-1 ; j>=0 ; j--){
+				if (array[j]==array[i]){
+					check=true;
+					break;
+				}
+			}
+			if (check==false){
+				arr.unshift(array[i]);
+			}
+		}
+		return arr;		
+	}else{
+		var newArr=[];
+		for (var i =0 ; i<array.length; i++){
+			newArr.push(iterator(array[i]))
+		}
+		var boo = newArr[0];
+		arr.push(array[0]);
+		for (var i=1; i<newArr.length; i++){
+			if (newArr[i]!==boo){
+				arr.push(array[i]);
+				return arr;
+			}
+		}
+	}
   };
-
-
 
   // Return the results of applying an iterator to each element.
 	_.map = function(collection, iterator) {
     /* START SOLUTION */
-    	var arr=[];
-    	for (var i=0;i<collection.length;i++){
-    		arr[i]=iterator(collection[i]);
-    	}
-    	return arr;
+		var arr=[];
+		if (Array.isArray(collection)){
+			for (var i=0;i<collection.length;i++){
+    			arr.push(iterator(collection[i], i , collection));
+    		}
+    		return arr;
+		}else if (typeof collection == "object"){
+			for (var i in collection){
+    			arr.push(iterator(collection[i], i , collection));
+			}
+			return arr;
+		}
+    	
     /* END SOLUTION */
 	};
 
@@ -225,6 +253,31 @@
     // as an example of this.
     /* START SOLUTION */
 
+	var arr=[];
+	
+	if (Array.isArray(collection)){
+		var boo=true;
+		for (var i=0 ; i<collection.length ; i++){
+			if (typeof collection[i] != "object"){
+				boo=false;
+				break;
+			}
+		}
+
+		if (boo){
+			for (var i=0 ; i<collection.length ; i++){
+				if (collection[i].hasOwnProperty(key)){
+					arr.push(collection[i][key]);
+				} else{
+					arr.push(undefined);
+				}
+			   
+			}
+		}
+		return arr;
+	}
+
+
     /* END SOLUTION */
   };
 
@@ -239,8 +292,21 @@
   // until the second element, with the first element as its second argument.
   //
   _.reduce = function(collection, iterator, accumulator) {
-    /* START SOLUTION */
+	/* START SOLUTION */
+	
+	var acc=0;
 
+	if ( arguments[2] == undefined){
+		acc=collection[0];
+	} else{
+		acc=arguments[2];
+		acc=iterator(acc, collection[0]);
+	}
+
+	for (var i=1 ; i<collection.length ; i++){
+		acc = iterator(acc, collection[i]);
+	}
+	return acc;
 
 
     /* END SOLUTION */
@@ -266,12 +332,5 @@
   	}
   	return -1;
   };
-
-
-
-
-
-
-
 
 }());
